@@ -13,5 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Score: 0
   GainHp: -0.3
-  Image: {fileID: 21300000, guid: 1304343364e1ade40a93931a5dacc822, type: 3}
+  Image: {fileID: 21300000, guid: 23f2dcab7a131324d922cfb2bd07db80, type: 3}
   Sound: {fileID: 8300000, guid: ed249e373679d4a11adc0b58a4477f45, type: 3}

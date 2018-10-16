@@ -5,7 +5,7 @@ namespace Play
 	public class ItemManager : MonoBehaviour
 	{
 		public float ScrollSpeed;
-		public ItemObject ItemObject;
+		[HideInInspector] public ItemObject ItemObject;
 		private StageManager _stageManager;
 		
 		private void Start()

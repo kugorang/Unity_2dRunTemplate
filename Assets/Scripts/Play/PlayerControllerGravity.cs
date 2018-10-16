@@ -4,16 +4,14 @@ namespace Play
 {
     public class PlayerControllerGravity : MonoBehaviour
     {
-        /*private float _dirX;*/
-	
         [SerializeField] 
-        private float _jumpForce = 150f/*, _moveSpeed = 5f*/;
+        private float _jumpForce = 150f;
 	
         private Rigidbody2D _rb;
 
         private bool _doubleJumpAllowed, _onTheGround;
 
-        public StageManager StageManager;
+        [HideInInspector] public StageManager StageManager;
 	
         private void Start()
         {
