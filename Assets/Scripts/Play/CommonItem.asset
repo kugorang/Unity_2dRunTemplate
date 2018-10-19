@@ -14,4 +14,4 @@ MonoBehaviour:
   Score: 10
   GainHp: 0.05
   Image: {fileID: 21300000, guid: f5db6f0d9a8dac04bbc1617441e56997, type: 3}
-  Sound: {fileID: 8300000, guid: f2882c866e72c4440a6de6d9326f5a79, type: 3}
+  SoundName: CommonItem

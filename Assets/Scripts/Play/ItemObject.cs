@@ -9,6 +9,6 @@ namespace Play
 		public int Score;
 		public float GainHp;
 		public Sprite Image;
-		public AudioClip Sound;
+		public string SoundName;
 	}
 }

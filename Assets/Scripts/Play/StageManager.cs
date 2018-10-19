@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,8 +21,6 @@ namespace Play
 
 		private int _score;
 		public Text GameScoreText;
-
-		public AudioSource SFX;
 		
 		public GameObject ScorePanel;
 		
@@ -31,12 +30,17 @@ namespace Play
 		private List<GameObject> _commonItemPool, _epicItemPool, _boomItemPool;
 
 		private RankingManager _rankingManager;
+		private AudioManager _audioManager;
 
 		private void Start()
 		{
 			_rankingManager = GetComponent<RankingManager>();
+			_audioManager = AudioManager.Instance;
 			
 			Init();
+			
+			if (!_audioManager.IsPlay("Theme"))
+				_audioManager.Play("Theme");
 			
 			StartCoroutine("TimerOn");
 			StartCoroutine("MakeItem");
@@ -78,6 +82,8 @@ namespace Play
 			}
 
 			IsGameOver = true;
+			_audioManager.Stop("Theme");
+			_audioManager.Play("GameOver");
 
 			_rankingManager.ShowResult(_score);
 		}
@@ -110,11 +116,6 @@ namespace Play
 		public void IncreaseHp(float gainHp)
 		{
 			HpBar.fillAmount += gainHp;
-		}
-
-		public void PlaySoundEffect(AudioClip audioClip)
-		{
-			SFX.PlayOneShot(audioClip);
 		}
 		
 		private GameObject GetCommonItem()
@@ -178,6 +179,6 @@ namespace Play
 			_boomItemPool.Add(newItem);
 			
 			return newItem;
-	}	
+		}	
 	}
 }

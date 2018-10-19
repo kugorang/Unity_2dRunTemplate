@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Common;
+using UnityEngine;
 
 namespace Play
 {
@@ -12,10 +13,12 @@ namespace Play
         private bool _doubleJumpAllowed, _onTheGround;
 
         [HideInInspector] public StageManager StageManager;
+        private AudioManager _audioManager;
 	
         private void Start()
         {
             _rb = GetComponent<Rigidbody2D>();
+            _audioManager = AudioManager.Instance;
         }
 	
         private void Update()
@@ -35,15 +38,15 @@ namespace Play
 	
         private void Jump()
         {
-            _rb.velocity = Vector2.up * _jumpForce;
+            _rb.velocity = Vector2.up * _jumpForce;          
+            
+            _audioManager.Play("Jump");
         }
     
         public void OnJumpBtnClick()
         {
             if (StageManager.IsPause)
                 return;
-            
-            _onTheGround = Mathf.Abs(_rb.velocity.y) <= 0;
         
             if (_onTheGround)
             {

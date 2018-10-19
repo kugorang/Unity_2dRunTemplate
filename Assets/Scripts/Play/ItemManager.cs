@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Common;
+using UnityEngine;
 
 namespace Play
 {
@@ -32,7 +33,7 @@ namespace Play
 
 			_stageManager.IncreaseScore(ItemObject.Score);
 			_stageManager.IncreaseHp(ItemObject.GainHp);
-			_stageManager.PlaySoundEffect(ItemObject.Sound);
+			AudioManager.Instance.Play(ItemObject.SoundName);
 			
 			gameObject.SetActive(false);
 		}
