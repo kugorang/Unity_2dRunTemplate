@@ -45,8 +45,10 @@ namespace Play
     
         public void OnJumpBtnClick()
         {
-            if (StageManager.IsPause)
+            if (StageManager.bPause)
+            {
                 return;
+            }   
         
             if (_onTheGround)
             {

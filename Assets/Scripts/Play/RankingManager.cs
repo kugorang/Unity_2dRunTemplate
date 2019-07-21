@@ -4,56 +4,58 @@ using UnityEngine.UI;
 namespace Play
 {
 	public class RankingManager : MonoBehaviour
-	{
-		/*// Static instance of GameManager which allows it to be accessed by any other script.
-		public static RankingManager Instance;*/
-		
-		private int _highScore;
-		public Text GameHighScoreText;
-		
-		public Text ResultScoreText;
-		public Text ResultHighScoreText;
-		
-		/*private void Awake()
-		{
-			// Check if instance already exists
-			if (Instance == null)
-			{        
-				// if not, set instance to this
-				Instance = this;
-			}
-			//If instance already exists and it's not this:
-			else if (Instance != this)
-			{        
-				//Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
-				Destroy(gameObject);    
-			}   
+	{		
+		private int highScore;
 
-			//Sets this to not be destroyed when reloading scene
-			DontDestroyOnLoad(gameObject);
-		}*/
+        public int HighScore
+        {
+            get
+            {
+                highScore = PlayerPrefs.GetInt("HighScore", 0);
+
+                return highScore;
+            }
+            set
+            {
+                PlayerPrefs.SetInt("HighScore", value);
+
+                highScore = value;
+            }
+        }
+
+        private bool bCheckHighScore;
+
+        [SerializeField]
+		private Text gameHighScoreText = null, resultScoreText = null, resultHighScoreText = null;
+
+        [SerializeField]
+        private Image medalImage = null;
 
 		// Use this for initialization
 		private void Start ()
 		{
-			_highScore = PlayerPrefs.GetInt("HighScore", 0);
-			GameHighScoreText.text = _highScore.ToString();
+			gameHighScoreText.text = HighScore.ToString();
 		}
 
 		public void CheckHighScore(int nowScore)
 		{
-			if (nowScore <= _highScore) 
+			if (nowScore <= highScore) 
 				return;
-		
-			_highScore = nowScore;
-			PlayerPrefs.SetInt("HighScore", nowScore);
-			GameHighScoreText.text = _highScore.ToString();
+
+            bCheckHighScore = true;
+            HighScore = nowScore;
+			gameHighScoreText.text = highScore.ToString();
 		}
 
 		public void ShowResult(int nowScore)
 		{
-			ResultScoreText.text = nowScore.ToString();
-			ResultHighScoreText.text = PlayerPrefs.GetInt("HighScore", 0).ToString();
+			resultScoreText.text = nowScore.ToString();
+			resultHighScoreText.text = highScore.ToString();
+
+            if (bCheckHighScore)
+            {
+                medalImage.gameObject.SetActive(true);
+            }
 		}
 	}
 }

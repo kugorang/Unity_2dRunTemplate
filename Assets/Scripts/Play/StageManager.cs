@@ -10,173 +10,206 @@ namespace Play
 	{
 		// 게임 종료 여부와 일시정지 여부를 판단하는 bool 변수
 		[HideInInspector]
-		public bool IsGameOver, IsPause;
+		public bool bGameOver, bPause;
 	
 		// 게임 시간과 관련된 변수
-		private float _oneFrameSecond;
-		private WaitForSeconds _waitForSeconds;
+		private float oneFrameSecond;
+		private WaitForSeconds waitForSeconds;
 	
-		public Image HpBar;
-		public float MaxTimeSeconds;
+        // HP 관련 변수
+        [SerializeField]
+		private Image hpBar = null;
 
-		private int _score;
-		public Text GameScoreText;
-		
-		public GameObject ScorePanel;
-		
-		// 아이템 풀
-		public GameObject ItemPrefab;
-		public ItemObject CommonItemSo, RareItemSo, BoomItemSo;
-		private List<GameObject> _commonItemPool, _epicItemPool, _boomItemPool;
+        [SerializeField]
+		private float maxTimeSeconds = 0f;
 
-		private RankingManager _rankingManager;
-		private AudioManager _audioManager;
+		private int score;
+
+        [SerializeField]
+		private Text gameScoreText = null;
+		
+        [SerializeField]
+		private GameObject scorePanel = null;
+
+        // 아이템 풀
+        [SerializeField]
+        private GameObject itemPrefab = null;
+
+        [SerializeField]
+		private ItemObject commonItemSo = null, rareItemSo = null, boomItemSo = null;
+
+		private List<GameObject> commonItemPool, epicItemPool, boomItemPool;
+
+		private RankingManager rankingManager;
+		private AudioManager audioManager;
 
 		private void Start()
 		{
-			_rankingManager = GetComponent<RankingManager>();
-			_audioManager = AudioManager.Instance;
+			rankingManager = GetComponent<RankingManager>();
+			audioManager = AudioManager.Instance;
 			
 			Init();
 			
-			if (!_audioManager.IsPlay("Theme"))
-				_audioManager.Play("Theme");
-			
+			if (!audioManager.IsPlay("Theme"))
+            {
+                audioManager.Play("Theme");
+            }
+				
 			StartCoroutine("TimerOn");
 			StartCoroutine("MakeItem");
 		}
 
-		private void Update()
-		{
-			if (!IsGameOver || IsPause) 
-				return;
-
-			IsPause = true;
-			ScorePanel.SetActive(true);
-		}
-
 		public void Init()
 		{
-			IsGameOver = false;
-			IsPause = false;
-			_oneFrameSecond = 0.02f;
-			_waitForSeconds = new WaitForSeconds(_oneFrameSecond);
-			_commonItemPool = new List<GameObject>();
-			_epicItemPool = new List<GameObject>();
-			_boomItemPool = new List<GameObject>();
+            ResumeGame();
+
+            bGameOver = false;
+			oneFrameSecond = 0.02f;
+			waitForSeconds = new WaitForSeconds(oneFrameSecond);
+			commonItemPool = new List<GameObject>();
+			epicItemPool = new List<GameObject>();
+			boomItemPool = new List<GameObject>();
 			
-			GameScoreText.text = 0.ToString();
+			gameScoreText.text = 0.ToString();
 			
 			StopAllCoroutines();
 		}
 
 		private IEnumerator TimerOn()
 		{
-			var decreaseValue = 100 * _oneFrameSecond / MaxTimeSeconds / 60;
+			var decreaseValue = 100 * oneFrameSecond / maxTimeSeconds / 60;
 		
-			while (HpBar.fillAmount > 0)
+			while (hpBar.fillAmount > 0)
 			{
-				HpBar.fillAmount -= decreaseValue;
+				hpBar.fillAmount -= decreaseValue;
 			
-				yield return _waitForSeconds;
+				yield return waitForSeconds;
 			}
 
-			IsGameOver = true;
-			_audioManager.Stop("Theme");
-			_audioManager.Play("GameOver");
+            bGameOver = true;
+            PauseGame();
 
-			_rankingManager.ShowResult(_score);
-		}
+			audioManager.Stop("Theme");
+			audioManager.Play("GameOver");
+
+			rankingManager.ShowResult(score);
+
+            scorePanel.SetActive(true);
+        }
+
+        public void PauseGame()
+        {
+            bPause = true;
+            Time.timeScale = 0f;
+        }
+
+        public void ResumeGame()
+        {
+            bPause = false;
+            Time.timeScale = 1f;
+        }
 
 		private IEnumerator MakeItem()
 		{
-			while (!IsGameOver)
+			while (!bGameOver)
 			{
 				yield return new WaitForSeconds(Random.Range(0.5f, 1.0f));
 
 				var randomValue = Random.Range(0, 100);
 				
 				if (randomValue > 60)
-					GetBoomItem().SetActive(true);
-				else if (randomValue > 10)
-					GetCommonItem().SetActive(true);
+                {
+                    GetBoomItem().SetActive(true);
+                }
+                else if (randomValue > 10)
+                {
+                    GetCommonItem().SetActive(true);
+                }
 				else
-					GetEpicItem().SetActive(true);
+                {
+                    GetEpicItem().SetActive(true);
+                }	
 			}
 		}
 
 		public void IncreaseScore(int increaseAmount)
 		{
-			_score += increaseAmount;
-			GameScoreText.text = _score.ToString();
+			score += increaseAmount;
+			gameScoreText.text = score.ToString();
 		
-			_rankingManager.CheckHighScore(_score);
+			rankingManager.CheckHighScore(score);
 		}
 
 		public void IncreaseHp(float gainHp)
 		{
-			HpBar.fillAmount += gainHp;
+			hpBar.fillAmount += gainHp;
 		}
 		
 		private GameObject GetCommonItem()
 		{
-			foreach (var item in _commonItemPool)
+			foreach (var item in commonItemPool)
 			{
-				if (item.activeSelf) 
-					continue;
+				if (item.activeSelf)
+                {
+                    continue;
+                }
 				
 				return item;
 			}
 
-			var newItem = Instantiate(ItemPrefab);
-
+			var newItem = Instantiate(itemPrefab);
 			var itemManager = newItem.GetComponent<ItemManager>();
-			itemManager.ItemObject = CommonItemSo;
+
+			itemManager.ItemObject = commonItemSo;
 			itemManager.Init();
 				
-			_commonItemPool.Add(newItem);
+			commonItemPool.Add(newItem);
 			
 			return newItem;
 		}
 		
 		private GameObject GetEpicItem()
 		{
-			foreach (var item in _epicItemPool)
+			foreach (var item in epicItemPool)
 			{
 				if (item.activeSelf)
-					continue;
+                {
+                    continue;
+                }	
 				
 				return item;
 			}
 
-			var newItem = Instantiate(ItemPrefab);
-			
+			var newItem = Instantiate(itemPrefab);
 			var itemManager = newItem.GetComponent<ItemManager>();
-			itemManager.ItemObject = RareItemSo;
+
+			itemManager.ItemObject = rareItemSo;
 			itemManager.Init();
 			
-			_epicItemPool.Add(newItem);
+			epicItemPool.Add(newItem);
 			
 			return newItem;
 		}
 		
 		private GameObject GetBoomItem()
 		{
-			foreach (var item in _boomItemPool)
+			foreach (var item in boomItemPool)
 			{
 				if (item.activeSelf)
-					continue;
+                {
+                    continue;
+                }	
 				
 				return item;
 			}
 
-			var newItem = Instantiate(ItemPrefab);
-			
+			var newItem = Instantiate(itemPrefab);
 			var itemManager = newItem.GetComponent<ItemManager>();
-			itemManager.ItemObject = BoomItemSo;
+
+			itemManager.ItemObject = boomItemSo;
 			itemManager.Init();
 			
-			_boomItemPool.Add(newItem);
+			boomItemPool.Add(newItem);
 			
 			return newItem;
 		}	
