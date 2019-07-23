@@ -2507,8 +2507,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6927e4284bfb08f4b9952956802bb9da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bGameOver: 0
-  bPause: 0
   hpBar: {fileID: 957663407}
   maxTimeSeconds: 30
   gameScoreText: {fileID: 1499028004}
@@ -2517,6 +2515,7 @@ MonoBehaviour:
   commonItemSo: {fileID: 11400000, guid: 18b318bd4d8c83341b811c54fc245c5a, type: 2}
   rareItemSo: {fileID: 11400000, guid: 5211a8ef3831bf74ca46504e9e2f447c, type: 2}
   boomItemSo: {fileID: 11400000, guid: 173e1ea46e516954ca8d1df38984fc6e, type: 2}
+  playerAnimator: {fileID: 1786364750}
 --- !u!114 &1246590811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3367,7 +3366,7 @@ Animator:
   m_GameObject: {fileID: 1786364749}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0b31bcf67693b1c45a9ff939d60cbad7, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4b500bce1f83e8d4cb13167d57842d2f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3413,7 +3412,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: 214905f5174f042bcb275821987b81c6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cd9143090423d45dbb80653982e6c3b8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3471,8 +3470,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 926ef18415b20e642b2b244630d27c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _jumpForce: 4
-  StageManager: {fileID: 1246590810}
+  jumpForce: 4
+  animator: {fileID: 1786364750}
 --- !u!58 &1786364756
 CircleCollider2D:
   m_ObjectHideFlags: 0

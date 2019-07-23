@@ -5,58 +5,84 @@ namespace Play
 {
     public class PlayerControllerGravity : MonoBehaviour
     {
-        [SerializeField] 
-        private float _jumpForce = 150f;
+        [SerializeField]
+        private float jumpForce = 4f;
 	
-        private Rigidbody2D _rb;
+        private Rigidbody2D rb;
 
-        private bool _doubleJumpAllowed, _onTheGround;
+        private bool doubleJumpAllowed, onTheGround;
 
-        [HideInInspector] public StageManager StageManager;
-        private AudioManager _audioManager;
-	
+        public bool DoubleJumpAllowed
+        {
+            get
+            {
+                return doubleJumpAllowed;
+            }
+            set
+            {
+                doubleJumpAllowed = value;
+                animator.SetBool("bDoubleJumpAllowed", value);
+            }
+        }
+
+        private bool OnTheGround
+        {
+            get
+            {
+                return onTheGround;
+            }
+            set
+            {
+                onTheGround = value;
+                animator.SetBool("bOnTheGround", value);
+            }
+        }
+
+        private AudioManager audioManager;
+
+        [SerializeField]
+        private Animator animator = null;
+
         private void Start()
         {
-            _rb = GetComponent<Rigidbody2D>();
-            _audioManager = AudioManager.Instance;
+            rb = GetComponent<Rigidbody2D>();
+
+            audioManager = AudioManager.Instance;
         }
 	
         private void Update()
         {
-            _onTheGround = Mathf.Abs(_rb.velocity.y) <= 0;
+            OnTheGround = Mathf.Abs(rb.velocity.y) <= 0;
         
-            if (_onTheGround)
+            if (OnTheGround)
             {
-                _doubleJumpAllowed = true;
+                DoubleJumpAllowed = true;
+                animator.SetBool("bJump", false);
             }
         }
 	
         private void FixedUpdate()
         {
-            _rb.velocity = new Vector2(0, _rb.velocity.y);
+            rb.velocity = new Vector2(0, rb.velocity.y);
         }
 	
         private void Jump()
         {
-            _rb.velocity = Vector2.up * _jumpForce;          
+            rb.velocity = Vector2.up * jumpForce;
             
-            _audioManager.Play("Jump");
+            audioManager.Play("Jump");
+            animator.SetBool("bJump", true);
         }
     
         public void OnJumpBtnClick()
         {
-            if (StageManager.bPause)
-            {
-                return;
-            }   
-        
-            if (_onTheGround)
+            if (OnTheGround)
             {
                 Jump();
             }
-            else if (_doubleJumpAllowed)
+            else if (DoubleJumpAllowed)
             {
-                _doubleJumpAllowed = false;
+                DoubleJumpAllowed = false;
                 Jump();
             }
         }

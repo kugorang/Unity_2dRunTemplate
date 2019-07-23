@@ -6,14 +6,28 @@ using UnityEngine.UI;
 
 namespace Play
 {
-	public class StageManager : MonoBehaviour
-	{
-		// 게임 종료 여부와 일시정지 여부를 판단하는 bool 변수
-		[HideInInspector]
-		public bool bGameOver, bPause;
-	
-		// 게임 시간과 관련된 변수
-		private float oneFrameSecond;
+    public class StageManager : MonoBehaviour
+    {
+        // 게임 종료 여부와 일시정지 여부를 판단하는 bool 변수
+        public bool bPause { get; private set; }
+
+        private bool bGameOver;
+
+        public bool GameOver
+        {
+            get
+            {
+                return bGameOver;
+            }
+            set
+            {
+                bGameOver = value;
+                playerAnimator.SetBool("bGameOver", value);
+            }
+        }
+
+        // 게임 시간과 관련된 변수
+        private float oneFrameSecond;
 		private WaitForSeconds waitForSeconds;
 	
         // HP 관련 변수
@@ -43,6 +57,9 @@ namespace Play
 		private RankingManager rankingManager;
 		private AudioManager audioManager;
 
+        [SerializeField]
+        private Animator playerAnimator;
+
 		private void Start()
 		{
 			rankingManager = GetComponent<RankingManager>();
@@ -63,7 +80,7 @@ namespace Play
 		{
             ResumeGame();
 
-            bGameOver = false;
+            GameOver = false;
 			oneFrameSecond = 0.02f;
 			waitForSeconds = new WaitForSeconds(oneFrameSecond);
 			commonItemPool = new List<GameObject>();
@@ -86,7 +103,7 @@ namespace Play
 				yield return waitForSeconds;
 			}
 
-            bGameOver = true;
+            GameOver = true;
             PauseGame();
 
 			audioManager.Stop("Theme");
@@ -111,7 +128,7 @@ namespace Play
 
 		private IEnumerator MakeItem()
 		{
-			while (!bGameOver)
+			while (!GameOver)
 			{
 				yield return new WaitForSeconds(Random.Range(0.5f, 1.0f));
 
