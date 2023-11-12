@@ -1,37 +1,8 @@
-## Welcome to GitHub Pages
+# 2D 러닝 게임 템플릿
 
-You can use the [editor on GitHub](https://github.com/kugorang/Unity_2dRunTemplate/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+* Unity로 제작한 Android용 2D 러닝 게임 템플릿입니다.
+* 2D 러닝 게임을 만들면서 게임에서 자주 사용되는 Scene 전환,  사운드 관리 등을 모듈화 하여 다른 프로젝트에서도 쓸 수 있게끔 하는 것을 목표로 하였습니다.
+* 비교적 Unity에서 새로 추가되었던 기능들 중 프로젝트에 어울리는 기능이 있으면 사용하고자 했습니다.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kugorang/Unity_2dRunTemplate/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+## Screenshot
+![image](https://github.com/kugorang/Unity_2dRunTemplate/assets/12571114/46b63727-4b2b-4c19-bb45-8f02fe605d93)
